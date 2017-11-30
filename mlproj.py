@@ -1,6 +1,9 @@
 
 #import read
 
+from copy import deepcopy
+
+##PART 2 number 1,2,3
 def emissionfunction(X, Y, x, y, k=2):
 
     dic = {}
@@ -50,7 +53,7 @@ def count_Y2X(X, Y, x, y):
         Y2X += 1
   return Y2X
 
-
+#############################END OF PART 2##################################
 def getUniqueY(Y):
   a = set(y for i in Y for y in i)
   return list(a)
@@ -107,26 +110,134 @@ def sentiment_analysis(word_seq, X, Y):
 
 #PART 3
 
+def emissionXExist(YX, Y, x, y):
+    # if(countY2X(YX, x, y) == 0):
+    #     return 0
+    # else:
+    return countY2X(YX, x, y)/(countY(Y, y))
+
+def emissionXnotExist(Y, y):
+    return 1/(countY(Y, y) + 1)
+
+
+def emissionParameters(YX, comX, Y, x, y):
+
+    # Check if x apper in the training set
+    if checkNewXinX(comX, x) == True:
+        output = emissionXExist(YX, Y, x, y)
+    else:
+        output = emissionXnotExist(Y, y)
+    return output
+"""This function count the total # of y in a tag sequence"""
+def countY(Y, y):
+    num_Y = 0
+    for sub_y in Y:
+        num_Y += sub_y.count(y)
+    return num_Y
+
+"""This function check if the new x appear in the training X set"""
+def checkNewXinX(X, x):
+    if x in combineX(X):
+        return True
+    else:
+        return False
 # transmission parameters
 # count(yi-1, yi-1)/ count(yi-1)
 # E.g: 'START', 'V'
-def transitionParameter(Y, curr_y, next_y):
-    # print(curr_y,next_y)
-    newY=""
-    for y in Y:
-        y.insert(0,"START")
-        y.insert(len(y)+1, "STOP")
-                # a = "START" + ''.join(map(str,y)) + "STOP"
-                # newY += a
-                # print(newY)
-        print(y)
-    pattern = curr_y + next_y
-    count_yi_minus_one = count_Y(Y,curr_y)
-    # print("count_yi_minus_one: "+str(count_yi_minus_one))
-    transition_count = countPattern(Y,pattern)
-    # print("transition_count: "+str(transition_count))
+def transitionParameter(Y, prev_y, current_y, modi, join):
+    
+    # probability of transition that we want to get
+    transition = prev_y + "-->" +current_y
 
-    return transition_count/count_yi_minus_one
+    # A modified Y sequence with 'START' & 'STOP' state added
+    newY = modi
+  
+    # get the total number of prev Y
+    count_prevY = countY(newY,prev_y)
+    # print(count_prevY)
+
+    # get the number of transition count Yi-1 -> Yi
+    transition_count = join.count(transition)
+    # print(transition_count)
+    
+
+    return transition_count/count_prevY
+
+
+"""This function adds 'START' and 'STOP to the Y sequence"""
+def modifiedY(Y):
+    temp = deepcopy(Y)
+    
+    for i in range(len(Y)):
+        temp[i].insert(0, "START")
+        temp[i].insert(len(temp[i]) + 1, "STOP")
+
+    return temp
+
+def joinY(newY):
+    sq = []
+
+    for y in newY:
+        # print(y)
+        for t in range(len(y)-1):
+        	sq.append(y[t]+"-->"+y[t+1])
+    return sq
+
+"""This function join each y and x respectively and form a string"""
+def YtoX(X, Y):
+    Y2X = []
+    count = 0
+    # pattern = x + "-->" + y
+    for i in range(len(X)):
+        for j in range(len(X[i])):
+            Y2X.append(Y[i][j] + "-->" + X[i][j])
+    
+    # count  =Y2X.count(pattern)
+    return Y2X
+
+def combineX(X):
+    sq = list()
+    for word_seq in X:
+        for word in word_seq:
+            sq.append(word)
+    
+    return sq
+
+"""This function will form a transition params table"""
+def transTable(Y, uniY, modi, join):
+    """TODO:
+        Add 'START' & 'STOP' for the 2 unique Y seq
+        and form a probability table"""
+    
+
+    # unique Y sequence at y-axis
+    uniY_vertical = deepcopy(uniY)
+    uniY_vertical.insert(0, "START") 
+
+    # unique X sequence at x-axis
+    uniY_horizontal = deepcopy(uniY)
+    uniY_horizontal.insert(len(uniY_vertical) + 1, "STOP")
+
+    # A dict to store the state(i-1, i) mapped with prob
+    prob_dict = {}
+
+    for prev_state in uniY_vertical:
+
+        for current_state in uniY_horizontal:
+            state = (prev_state, current_state)
+            # print(state)
+            prob_dict[state] = transitionParameter(Y, prev_state, current_state, modi, join) 
+            
+
+    
+    return prob_dict
+
+
+
+
+
+
+
 
 #######################################################################################################
 
