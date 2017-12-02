@@ -32,8 +32,8 @@ def read(file, word_seq, label_seq):
 				# print(line)
 read(file_location, word_seq, label_seq)
 
-print(word_seq)
-print(label_seq)
+#print(word_seq)
+#print(label_seq)
 
 
 #####################################################################
