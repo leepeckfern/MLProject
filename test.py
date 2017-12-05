@@ -444,47 +444,40 @@ def secondOrderViterbi(X,Y,newX):
         optimal_Y_sequence=[]
         Pi_1s={}
         Pi_Ks={}
-        max_Pi_i_minus1 = 0
-        t = None
-        u = None
         for i in range(len(sentence)+2):
             if i == 0:
                 max_Pi_i_minus1 = 1
             elif i == 1:
                 for v in a:
                     for u in a:
-                        Pi_Ks[i,u,v] = (0, None)
+                        Pi_Ks[i,u,v] = 0
                     # print(a_tuv(trans2,'START','START',v),emissionParameters2(emission,sentence[i-1],v))
-                    Pi_Ks[i,'START',v] = (a_tuv(trans2,'START','START',v)*emissionParameters2(emission,sentence[i-1],v),'START')
+                    Pi_Ks[i,'START',v] = a_tuv(trans2,'START','START',v)*emissionParameters2(emission,sentence[i-1],v)
                     # print (Pi_Ks[i,'START',v])
             elif i == (len(sentence)+1):
                 for u in a:
                     maxT = 0
-                    argmaxT = None
                     for t in a:
-                        value = Pi_Ks[i-1,t,u][0]*a_tuv(trans2,t,u,'STOP')
+                        value = Pi_Ks[i-1,t,u]*a_tuv(trans2,t,u,'STOP')
                         if value > maxT:
                             maxT = value
-                            argmaxT = t
-                    Pi_Ks[i,u,'STOP'] = (maxT,argmaxT)
-            else:
+                    Pi_Ks[i,u,'STOP'] = maxT
+            else: #i >=2
                 for v in a:
                     for u in a:
-                        maxT = -1
-                        argmaxT = None
+                        maxT = 0
                         for t in a:
-                            print(Pi_Ks[(i-1,t,u)])
-                            value = float(Pi_Ks[(i-1,t,u)][0]) * a_tuv(trans2,t,u,v)*emissionParameters2(emission,sentence[i-1],v)
-                            Pi_Ks[i,u,v]=(value, None)
+                            #print(Pi_Ks[(i-1,t,u)])
+                            value = float(Pi_Ks[(i-1,t,u)]) * a_tuv(trans2,t,u,v)*emissionParameters2(emission,sentence[i-1],v)
+                            Pi_Ks[i,u,v]=value
                             if value > maxT:
                                 maxT = value
-                                argmaxT = t
-                    Pi_Ks[i,u,v] = (maxT,argmaxT)
+                    Pi_Ks[i,u,v] = maxT
             for key in Pi_Ks:
                 if key[0] == i:
                     print(key,Pi_Ks[key])
-            sleep(2)
-        return None
+            #sleep(2)
+    return None
 
 
 
@@ -883,8 +876,8 @@ for t in a:
             if (t,u,v) in trans2:
                 print(t,u,v)
 print (a_tuv(trans2,'START','START','O'))
-# sleep(3)
-
+sleep(3)
+#
 
 
 #part5

@@ -228,14 +228,17 @@ def emissionXExist(YX, Y, x, y):
     # if(countY2X(YX, x, y) == 0):
     #     return 0
     # else:
-    return float(countY2X(YX, x, y))/((countY(Y, y)+1))
+    return float(countY2X(YX, x, y))/(float(countY(Y, y)+1))
 
 def emissionXnotExist(Y, y):
-    return 1/(countY(Y, y) + 1)
+    outt = float((countY(Y, y) + 1))
+    return 1/outt
 
 
 """This function calculate the probability for
-the emission from each state to the observation"""
+the emission from each state to the observation
+"""
+
 def emissionParameters(YX, comX, Y, x, y):
 
     # Check if x apper in the training set
