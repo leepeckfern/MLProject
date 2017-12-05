@@ -128,8 +128,24 @@ def YtoX(X, Y):
         for j in range(len(X[i])):
             Y2X.append(Y[i][j] + "-->" + X[i][j])
     
-    # count  =Y2X.count(pattern)
+#count  =Y2X.count(pattern)
     return Y2X
+
+
+def YtoX2(X, Y):
+    Y2X = {}
+    for i in range(len(X)):
+        for j in range(len(X[i])):
+            if (Y[i][j],X[i][j]) in Y2X:
+                Y2X[(Y[i][j],X[i][j])] += 1
+            else:
+                Y2X[(Y[i][j],X[i][j])] = 1
+            if Y[i][j] in Y2X:
+                Y2X[Y[i][j]] += 1
+            else:
+                Y2X[Y[i][j]] = 1
+    return Y2X
+
 
 """This function adds 'START' and 'STOP to the Y sequence"""
 def modifiedY(Y):
@@ -187,7 +203,7 @@ def transTable(Y, uniY, modi, join):
 
     # unique X sequence at x-axis
     uniY_horizontal = deepcopy(uniY)
-    uniY_horizontal.insert(len(uniY_vertical) + 1, "STOP")
+    uniY_horizontal.insert(len(uniY_vertical) , "STOP")   
 
     # A dict to store the state(i-1, i) mapped with prob
     prob_dict = {}
@@ -198,22 +214,21 @@ def transTable(Y, uniY, modi, join):
             state = (prev_state, current_state)
             # print(state)
             prob_dict[state] = transitionParameter(Y, prev_state, current_state, modi, join) 
-            
 
-    
     return prob_dict
+
 
 
 """Function that estimates the emission parameters 
 from the training set using MLE"""
 def part2EmissionParameter(YX, Y, x, y):
-  return countY2X(YX, x, y)/((countY(Y, y)))
+  return (countY2X(YX, x, y))/((countY(Y, y)))
 
 def emissionXExist(YX, Y, x, y):
     # if(countY2X(YX, x, y) == 0):
     #     return 0
     # else:
-    return countY2X(YX, x, y)/((countY(Y, y)+1))
+    return float(countY2X(YX, x, y))/((countY(Y, y)+1))
 
 def emissionXnotExist(Y, y):
     return 1/(countY(Y, y) + 1)
@@ -229,6 +244,16 @@ def emissionParameters(YX, comX, Y, x, y):
     else:
         output = emissionXnotExist(Y, y)
     return output
+
+
+def emissionParameters2(YX, x, y):
+    
+    # Check if x apper in the training set
+    if (y,x) in YX:
+        return float(YX[(y,x)])/YX[y]
+    else:
+        return 0
+
 
 def transList(Y, uniY, modi, join):
     """TODO:
