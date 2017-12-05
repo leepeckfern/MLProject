@@ -821,8 +821,8 @@ Y = [["V", "N", "V", "P", "D", "D", "N"], ["N", "V", "D", "V", "D", "N"]]
 #word_seq = [["the", "cat", "cry", "over", "the", "milk"]]#, ["The", "Spoon", "and", "fork", "ran", "away", "from", "the", "knife"]]
 word_seq = list()
 
-readW('/Volumes/SOYOUNG/MLProject/CN/CN/train', X, Y)
-readNewXW("/Volumes/SOYOUNG/MLProject/CN/CN/dev.in", word_seq)
+readW('EN/EN/train', X, Y)
+readNewXW("EN/EN/dev.in", word_seq)
 #print(emissionfunction(X,Y,"the", "D"))
               
 '''
@@ -848,9 +848,9 @@ with open('/Volumes/SOYOUNG/MLProject/CN/CN/dev.p3.out','w') as f:
         for ss in range(len(in_seq[s])): #ss is a word inside sentence
             print(in_seq[s][ss], w[s+1][ss], file=f)    #part3
         print('',file = f)
-
+'''
 #part 4
-with open('/Volumes/SOYOUNG/MLProject/CN/CN/dev.p4.out','w') as f:
+with open('EN/EN/dev.p4.out','w') as f:
     in_seq = copy.deepcopy(word_seq)
     clean_word_seq=cleanfunction(r.word_seq)
     #word_seq=[['-','I'],[ 'will', 'never', 'forget'],[ 'the', 'amazing', 'meal'],[ 'service', ',', 'and', 'ambiance'],['I', 'experience', 'at', 'this', 'restaurant', '.']]
@@ -859,14 +859,14 @@ with open('/Volumes/SOYOUNG/MLProject/CN/CN/dev.p4.out','w') as f:
         for ss in range(len(in_seq[s])): #ss is a word inside sentence
             print(in_seq[s][ss], w[s+1][ss], file=f)    #part4
         print('',file = f)
-'''
+''''''
 
 #print(np.argmax([8,8,8,778]))
 #out= YtoX2(clean_word_seq,r.label_seq)
 #   print(out)
 
 
-
+'''
 trans2 =(secondOrderTransmission(r.label_seq))
 print (trans2.keys())
 a = getUniqueY(r.label_seq)
@@ -878,8 +878,8 @@ for t in a:
 print (a_tuv(trans2,'START','START','O'))
 sleep(3)
 #
-
-
+'''
+'''
 #part5
 with open('/Volumes/SOYOUNG/MLProject/EN/EN/dev.p5.out','w') as f:
     in_seq = copy.deepcopy(word_seq)
@@ -892,3 +892,4 @@ with open('/Volumes/SOYOUNG/MLProject/EN/EN/dev.p5.out','w') as f:
             print(in_seq[s][ss], w[s+1][ss], file=f)    #part5
         print('',file = f)
 
+'''
