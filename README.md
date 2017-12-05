@@ -30,3 +30,9 @@ For EN, run <br>
 `python3 test.py 5 EN` <br>
 For FR, run <br>
 `python3 test.py 5 FR`
+<br>
+To run test, <br>
+For EN, run <br>
+`python3 test.py test EN` <br>
+For FR, run <br>
+`python3 test.py test FR`
