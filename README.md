@@ -1,4 +1,4 @@
-# Intructions to run
+# Instructions to run
 ## Part 2
 For **EN**, run <br>
 `python3 test.py 2 EN` <br><br>
